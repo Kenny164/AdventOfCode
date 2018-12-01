@@ -5,7 +5,16 @@ def starOne():
     return rollingTotal
 
 def starTwo():
-    pass
+    rollingTotal = 0
+    historicTotal = set({rollingTotal})
+    with open("./inputs/day1.txt","r") as f:
+        extractedInts = map(int,f)
+    for _ in range(100000):
+        for i in extractedInts:
+            rollingTotal += i
+            if rollingTotal in historicTotal:
+                return rollingTotal 
+            historicTotal.add(rollingTotal)
 
 if __name__ == "__main__":
-    print(starOne())
+    print(starTwo())
