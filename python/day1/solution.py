@@ -9,7 +9,7 @@ def starTwo():
     historicTotal = set({rollingTotal})
     with open("./inputs/day1.txt","r") as f:
         extractedInts = map(int,f)
-    for _ in range(100000):
+    for _ in range(10000):
         for i in extractedInts:
             rollingTotal += i
             if rollingTotal in historicTotal:
