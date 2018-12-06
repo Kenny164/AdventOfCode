@@ -39,6 +39,7 @@
 			"cmath": "cpp",
 			"optional": "cpp",
 			"string_view": "cpp"
-		}
+		},
+		"python.pythonPath": "C:\\Python27\\python.exe"
 	}
 }
