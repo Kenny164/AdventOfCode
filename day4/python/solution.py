@@ -34,28 +34,26 @@ def findSlacker(slog):
         sCount[snooze.guard] += snooze.up - snooze.down
     return sCount.most_common(1)[0]
 
-def getSlackerMins(sLog,slacker):
+def getSlackerMins(sLog, slacker=None):
     minTracker = Counter()
     for guard in sLog:
-        if guard.guard == slacker[0]:
-            for x in range(guard.down, guard.up):
-                minTracker[x] += 1
-    return minTracker
-
-def getAllmins():
-    pass
+        if slacker != None and guard.guard != slacker[0]:
+            continue
+        for x in range(guard.down, guard.up):
+            minTracker[(guard.guard, x)] += 1
+    (g, minute) = minTracker.most_common(1)[0][0]
+    return g * minute
 
 def starOne(sLog):
     worstGuard = findSlacker(sLog)
-    guardsWorstMoments = getSlackerMins(sLog,worstGuard)
-    worstMinute = guardsWorstMoments.most_common(1)[0]
-    return worstGuard[0] * worstMinute[0]
+    return getSlackerMins(sLog, worstGuard)
 
 def starTwo(sLog):
-    pass
+    return getSlackerMins(sLog)
 
 if __name__ == "__main__":
     fromFile = getInput()
     sLog = CreateSleepLog(fromFile)
     print(starOne(sLog))
+    print(starTwo(sLog))
     
