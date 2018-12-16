@@ -3,24 +3,12 @@ from collections import Counter
 
 Point = NamedTuple('Point', [('x', int), ('y', int)])
 
-def getInput():
+def getInput() -> List[Point]:
     knownCoords: List[Point] = []
     for line in open("./inputs/day6.txt", "r"):
         x, y = [int(p) for p in line.split(',')]
         knownCoords.append(Point(x, y))
     return knownCoords
-
-# example=r"""1, 1
-# 1, 6
-# 8, 3
-# 3, 4
-# 5, 5
-# 8, 9""".split('\n')
-
-# knownCoords: List[Point] = []
-# for line in example:
-#     x, y = [int(p) for p in line.split(',')]
-#     knownCoords.append(Point(x, y))
 
 def findManhattenDist(x: int, y: int, p: Point) -> int:
     return abs(x - p.x) + abs(y - p.y)
