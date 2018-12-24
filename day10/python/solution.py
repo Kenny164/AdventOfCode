@@ -21,15 +21,10 @@ def getInput() -> List[Position]:
         out.append(Position(x, y, vx, vy))
     return out
 
-def tick(posList: List[Position], reverse: bool=False) -> None:
-    if reverse:
-        for p in posList:
-            p.x += -p.vx
-            p.y += -p.vy
-        return
+def tick(posList: List[Position], jump: int = 1) -> None:
     for p in posList:
-        p.x += p.vx
-        p.y += p.vy
+        p.x += p.vx * jump
+        p.y += p.vy * jump
 
 def bBoxSize(posList: List[Position]) -> Tuple[int, int]:
     minX = min([p.x for p in posList])
@@ -44,8 +39,8 @@ def display(inputList) -> None:
     offsetX = min([p.x for p in inputList])
     offsetY = min([p.y for p in inputList])
     positions = set([(p.x, p.y) for p in inputList])
-    for y in range(offsetY+maxY+1):
-        for x in range(offsetX+maxX+1):
+    for y in range(offsetY, offsetY+maxY+1):
+        for x in range(offsetX, offsetX+maxX+1):
             if (x, y) in positions:
                 print('#', end='')
             else:
@@ -55,10 +50,10 @@ def display(inputList) -> None:
 def starOne(inputList: List[Position]) -> int:
     bBox = bBoxSize(inputList)
     for i in range(20000):
-        print(f'step {i}: {bBox}')
+        #print(f'step {i}: {bBox}')
         tick(inputList)
         if bBox[1] < bBoxSize(inputList)[1]:
-            tick(inputList, reverse=True)
+            tick(inputList, jump=-1) # reverse 1 step
             return i
         bBox = bBoxSize(inputList)
     raise 'bounding box size doesn\'t turn :('
@@ -68,9 +63,9 @@ def starTwo() -> int:
 
 if __name__ == "__main__":
     inputList = getInput()
-    #tick(inputList)
+    tick(inputList, jump = 10000)
     starOneOut = starOne(inputList)
-    print(starOneOut)
+    print(f'Completed in {starOneOut} steps!')
     display(inputList)
     # starTwoOut = starTwo(dependancies)
     # print(starTwoOut)
