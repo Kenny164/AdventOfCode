@@ -22,9 +22,12 @@ cellTots = DefaultDict(int)
 for y in range(1,300+1):
     for x in range(1,300+1):
         fuelCells[(x, y)] = findPowerLevel(x, y, 5719)
-        cellSums[(x, y)] = fuelCells[x, y] + fuelCells[x - 1, y] + fuelCells[x, y - 1] - fuelCells[x - 1, y - 1]
-        # Sum = D - B - C + A (D being current)
-        cellTots[(x, y)] 
+        cellSums[(x, y)] = fuelCells[x, y] + cellSums[x - 1, y] + cellSums[x, y - 1] - cellSums[x - 1, y - 1]
+        # Sum = D - B - C + A (D being current) will also need to offset since answer wants top-left
+        cellTots[(x-2, y-2)] = cellSums[(x, y)] - cellSums[(x, y - 3)] - cellSums[(x - 3, y)] + cellSums[(x - 3, y - 3)]
+
+out = max(cellTots, key=lambda x: cellTots[x])
+print(out)
 
 def starOne() -> int:
     pass
