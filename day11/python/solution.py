@@ -19,7 +19,7 @@ def getFuelCells(gridSerialId: int) -> tuple:
             cellSums[(x, y)] = fuelCells[x, y] + cellSums[x - 1, y] + cellSums[x, y - 1] - cellSums[x - 1, y - 1]
     return fuelCells, cellSums
 
-def getMaxSquare(cellSums, squareSize: int = 3) -> int:
+def getMaxSquare(cellSums, squareSize: int = 3) -> tuple:
     # Sum = D - B - C + A (D being current) will also need to offset since answer wants top-left
     cellTots = DefaultDict(int)
     for y in range(1,300+1):
@@ -32,7 +32,7 @@ def getMaxSquare(cellSums, squareSize: int = 3) -> int:
     maxOne = max(cellTots, key=lambda x: cellTots[x])
     return (maxOne, cellTots[maxOne])
 
-def starOne(gridSerialId: int, squareSize: int) -> int:
+def starOne(gridSerialId: int, squareSize: int) -> tuple:
     _, cellSums = getFuelCells(gridSerialId)
     out, _ = getMaxSquare(cellSums, squareSize)
     return out
