@@ -99,4 +99,8 @@ while cartCount>1:
     tickCount += 1
 
 # Star 2:
+<<<<<<< HEAD
 [print(c) for c in t.carts if not c.crashed]
+=======
+[c for c in t.carts if not c.crashed]
+>>>>>>> 78366f7d6e0594191dae38c096923e98b68008f0
