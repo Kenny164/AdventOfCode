@@ -69,7 +69,7 @@ class Track:
     def __init__(self):
         self.carts: List[Cart] = []
         self.grid: Dict[Position, Tile] = {}
-        with open("./inputs/day13Test.txt", "r") as f:
+        with open("./inputs/day13.txt", "r") as f:
             for y, line in enumerate(f.readlines()):
                 for x, c in enumerate(line):
                     if c in Cart_Directions:
@@ -82,33 +82,21 @@ class Track:
                     
 t = Track()
 
-for i in range(1000):
+# Star 1:
+cartCount = len(t.carts)
+tickCount = 0
+while cartCount>1:
+    t.carts.sort(key=lambda x: (x.x, x.y))
     for c in t.carts:
         if c.crashed: continue
         c.move(t.grid)
         for j, other in enumerate(t.carts):
-            if (other.x, other.y) == (c.x, c.y) and not other.crashed or not c.crashed:
+            if (other.x, other.y) == (c.x, c.y) and c is not other and not other.crashed:
                 c.crashed = True
                 t.carts[j].crashed = True
-                print(f'CRASH DETECTED @ ({c.x},{c.y})')
-                print(f'{c} / {other}')
-                print(t.carts)
-    #print(f'{i}: {t.carts}')
+                cartCount -= 2
+                print(f'CRASH DETECTED @ ({c.x},{c.y})   \t{cartCount} remaining.\t(tick {tickCount}).')
+    tickCount += 1
 
-#[(a.x, a.y) == (b.x, b.y) for b in t.carts if b is not a]
-
-
-def starOne():
-    pass
-
-def starTwo() -> int:
-    pass
-
-if __name__ == "__main__":
-    pass
-    # inputList = getInput()
-    # #print(inputList)
-    # starOneOut = starOne(inputList)
-    # print(starOneOut)
-    # starTwoOut = starTwo(dependancies)
-    # print(starTwoOut)
+# Star 2:
+[c for c in t.carts if not c.crashed]
