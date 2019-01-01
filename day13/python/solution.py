@@ -29,6 +29,12 @@ Cart_Advance = {
     Direction.LEFT: (-1, 0),
     Direction.RIGHT: (1, 0)
 }
+Cart_Advance_rev = { # poor man's bidict
+    (0, -1): Direction.UP,
+    (0, 1): Direction.DOWN,
+    (-1, 0): Direction.LEFT, 
+    (1, 0): Direction.RIGHT,
+}
 
 class Cart:
     def __init__(self, posX, posY, direction, turn=Turn.LEFT):
@@ -37,32 +43,27 @@ class Cart:
         self.turn = turn
         self.crashed = False
     
-    def move(self, track):
-            advDirection = Cart_Advance[self.direction]
-            self.x, self.y = (self.x + advDirection[0], self.y + advDirection[1])
-            print(f'moving: {self.direction}... {self}')
-            if track[self.x, self.y] == Tile.INTERSECTION:
-                pass
-            elif track[self.x, self.y] == Tile.F_SLASH and self.direction == Direction.UP:
-                self.direction = Direction.RIGHT
-            elif track[self.x, self.y] == Tile.F_SLASH and self.direction == Direction.DOWN:
-                self.direction = Direction.LEFT
-            elif track[self.x, self.y] == Tile.B_SLASH and self.direction == Direction.UP:
-                self.direction = Direction.LEFT
-            elif track[self.x, self.y] == Tile.B_SLASH and self.direction == Direction.DOWN:
-                self.direction = Direction.RIGHT
-            elif track[self.x, self.y] == Tile.F_SLASH and self.direction == Direction.RIGHT:
-                self.direction = Direction.DOWN
-            elif track[self.x, self.y] == Tile.F_SLASH and self.direction == Direction.LEFT:
-                self.direction = Direction.UP
-            elif track[self.x, self.y] == Tile.B_SLASH and self.direction == Direction.RIGHT:
-                self.direction = Direction.DOWN
-            elif track[self.x, self.y] == Tile.B_SLASH and self.direction == Direction.LEFT:
-                self.direction = Direction.UP
+    def move(self, track_grid):
+            dx, dy = Cart_Advance[self.direction]
+            self.x, self.y = (self.x + dx, self.y + dy)
+            #print(f'tile: {track_grid[self.x, self.y]}... {self}')
+            if track_grid[self.x, self.y] == Tile.INTERSECTION:
+                if self.turn == Turn.LEFT:
+                    self.direction = Cart_Advance_rev[(dy, -dx)]
+                    self.turn = Turn.STRAIGHT
+                elif self.turn == Turn.RIGHT:
+                    self.direction = Cart_Advance_rev[(-dy, dx)]
+                    self.turn = Turn.LEFT
+                else:
+                    self.turn = Turn.RIGHT
+            elif track_grid[self.x, self.y] == Tile.F_SLASH:
+                self.direction = Cart_Advance_rev[(-dy, -dx)]
+            elif track_grid[self.x, self.y] == Tile.B_SLASH:
+                self.direction = Cart_Advance_rev[(dy, dx)]
+            #print(self.direction)
             
-
     def __repr__(self):
-        return f'{self.x}, {self.y} {self.direction}/{self.turn} crashed:{self.crashed}'
+        return f'({self.x}, {self.y}) dir: {self.direction} / nextTurn: {self.turn} crashed:{self.crashed}'
 
 class Track:
     def __init__(self):
@@ -80,7 +81,23 @@ class Track:
                         self.grid[x, y] = Tile_Directions[c]
                     
 t = Track()
-        
+
+for i in range(1000):
+    for c in t.carts:
+        if c.crashed: continue
+        c.move(t.grid)
+        for j, other in enumerate(t.carts):
+            if (other.x, other.y) == (c.x, c.y) and not other.crashed or not c.crashed:
+                c.crashed = True
+                t.carts[j].crashed = True
+                print(f'CRASH DETECTED @ ({c.x},{c.y})')
+                print(f'{c} / {other}')
+                print(t.carts)
+    #print(f'{i}: {t.carts}')
+
+#[(a.x, a.y) == (b.x, b.y) for b in t.carts if b is not a]
+
+
 def starOne():
     pass
 
