@@ -17,17 +17,12 @@ fn main(){
 // Part 2
     let mut running_total: isize = 0;
     let mut historic_total: HashSet<isize> = HashSet::new();
-    //historic_total.insert(0);
-    let part2_cycle = input.iter().cycle();
 
-    for x in part2_cycle {
-        if historic_total.contains(&running_total) {break;}
-        historic_total.insert(running_total);
+    for x in input.iter().cycle() {
+        if !historic_total.insert(running_total) {break;}
         running_total += x;
     }
-
-
-
+    
 
 // Output    
     println!("Part 1: \t{}", part1);
