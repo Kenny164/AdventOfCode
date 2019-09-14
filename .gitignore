@@ -34,5 +34,8 @@
 # Swap files
 *.swp
 
+# Rust statics
+*.pdb
+
 # Build folder
 **/build/
