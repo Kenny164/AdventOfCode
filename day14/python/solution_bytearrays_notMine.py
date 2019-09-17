@@ -16,4 +16,7 @@ while True:
     elf2 = (elf2 + 1 + recipe2) % len(recipes_found)
     loop += 1
 
-print(recipes_found.index(puzzle))
+print(str(recipes_found[681901:681901+10]))
+print(f'Part 2: {recipes_found.index(puzzle)}')
+print(f'total iterations: {loop}')
+print(f'total length: {len(recipes_found)}')

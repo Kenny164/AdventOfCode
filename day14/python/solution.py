@@ -2,12 +2,14 @@ from typing import List, Tuple, NamedTuple
 
 class Scoreboard:
     def __init__(self, scores: List[int], elves: List[int]):
-        self.scores = scores
+        self.scores = bytearray(scores)
         self.elves = elves
     
     def __next__(self):
         new_score = sum([self.scores[e] for e in self.elves])
-        self.scores.extend(divmod(new_score, 10) if new_score > 9 else (new_score,))
+        d1, d2 = new_score // 10, new_score % 10
+        if d1: self.scores.append(d1)
+        self.scores.append(d2)
         for e, v in enumerate(self.elves):
             self.elves[e] = (v + self.scores[v] + 1) % len(self.scores)
         return new_score
@@ -29,9 +31,14 @@ def starOne(scores: Scoreboard, input_str: str) -> str:
     return str(scores)[input_val:input_val + 10]
 
 def starTwo(scores: Scoreboard, input_str: str) -> int:
-    while not input_str in str(scores):
+    input_ba = bytearray((int(c) for c in input_str))
+    loop = 0
+    while True:
+        if (loop % 250_000) == 0 and input_ba in scores.scores: # check every 1/4 mil for speed
+            break
         next(scores)
-    return str(scores).index(input_str)
+        loop += 1
+    return scores.scores.index(input_ba)
 
 if __name__ == "__main__":
     score_board = Scoreboard([3,7], [0,1])
