@@ -29,22 +29,20 @@ class Node:
         if self.level == 0:
             return metaSum + sum(self.meta)
         return metaSum
+        
+    def getP2(self):
+        if len(self.children) == 0:
+            return sum(self.meta)
+        s = 0
+        for c in self.meta:
+            if len(self.children) >= c:
+                s += self.children[c-1].getP2()
+        return s
 
     def __str__(self):
         return str("NODE: %dx Children and %dx metadata" % (self.childCount,self.metaCount))
-        
-def starOne(inputList: List[str]) -> str:
-    root = Node(inputList)
-    print(root.getMetaSum())
-    print(root._metaSum)
-
-def starTwo() -> int:
-    pass
 
 if __name__ == "__main__":
-    inputList = getInput()
-    #print(inputList)
-    starOneOut = starOne(inputList)
-    # print(starOneOut)
-    # starTwoOut = starTwo(dependancies)
-    # print(starTwoOut)
+    rootNode = Node(getInput())
+    print(rootNode.getMetaSum())
+    print(rootNode.getP2())
