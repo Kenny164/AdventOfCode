@@ -6,28 +6,24 @@ def getInput() -> List[str]:
     return out
 
 class Node:
-    _metaSum = 0
-    def __init__(self, input: List[str], level: int = 0):
-        self.childCount = input.pop(0)
-        self.metaCount = input.pop(0)
+    def __init__(self, inputList: List[str], level: int = 0):
+        self.childCount = inputList.pop(0)
+        self.metaCount = inputList.pop(0)
         self.level = level
         self.children = []
         self.meta = []
 
         for i in range(self.childCount):
-            self.children.append(Node(input, level+1))
+            self.children.append(Node(inputList, level+1))
         
         for i in range(self.metaCount):
-            meta = input.pop(0)
-            type(self)._metaSum += meta
+            meta = inputList.pop(0)
             self.meta.append(meta)
     
     def getMetaSum(self):
-        metaSum = 0
+        metaSum = sum(self.meta)
         for c in self.children:
-            metaSum += sum(c.meta) + c.getMetaSum()
-        if self.level == 0:
-            return metaSum + sum(self.meta)
+            metaSum += c.getMetaSum()
         return metaSum
         
     def getP2(self):
