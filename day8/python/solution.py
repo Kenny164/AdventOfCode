@@ -20,10 +20,10 @@ class Node:
             meta = inputList.pop(0)
             self.meta.append(meta)
     
-    def getMetaSum(self):
+    def getP1(self):
         metaSum = sum(self.meta)
         for c in self.children:
-            metaSum += c.getMetaSum()
+            metaSum += c.getP1()
         return metaSum
         
     def getP2(self):
@@ -40,5 +40,5 @@ class Node:
 
 if __name__ == "__main__":
     rootNode = Node(getInput())
-    print(rootNode.getMetaSum())
+    print(rootNode.getP1())
     print(rootNode.getP2())
