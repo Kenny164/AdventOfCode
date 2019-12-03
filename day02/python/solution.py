@@ -16,12 +16,18 @@ def run(program, step=0, noun=12, verb=2):
         else:
             raise RuntimeError("Unknown OPCODE")
 
-#assert run(TEST)[0] == 3500
+assert run(TEST, 0, 9, 10)[0] == 3500
 
 with open('./inputs/day02.txt', 'r') as f:
     inp = list(map(int, f.read().strip().split(',')))
 
 
-print(run(inp)[0])
+print('Part1', run(inp)[0])
 
-#for verb in range()
+for verb in range(100):
+    for noun in range(100):
+        out = run(inp,0,noun,verb)
+        if out[0] == 19690720:
+            print(f'verb:{verb}, noun:{noun}, result:{out[0]}, ANS: {100*noun+verb}')
+            break
+        
