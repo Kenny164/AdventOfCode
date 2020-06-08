@@ -11,3 +11,5 @@ if __name__ == "__main__":
     
     ImpCoder = icm.ImpCoderMachine(inp[:], 0, 1)
     print('Part1', ImpCoder.run())
+    ImpCoder = icm.ImpCoderMachine(inp[:], 0, 5)
+    print('Part2', ImpCoder.run())
